@@ -1,0 +1,1 @@
+{"id":"60a048de-e8d7-4ed3-8652-05e86f8da5b9","space":22800,"runtime":"python3.9","name":"eia_site_2","path":"kyxyx7","project":"b0bjw62w","account":"144798365827","region":"sa-east-1","deps":["fastapi","mysql-connector"],"envs":null,"public":true,"log_level":"debug","cron":""}
