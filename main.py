@@ -13,6 +13,12 @@ class Dot_current(BaseModel):
   units:str
   devices_id:int
 
+class Device(BaseModel):
+  name:str
+  secret:str
+  machines_id:int
+
+
 origins = ["*"]
 
 app.add_middleware(
@@ -93,7 +99,7 @@ async def create_current_dot(dot:Dot_current):
       mydb=mysql.connector.connect(host="dbadmin.c2xacwacu1dj.us-west-2.rds.amazonaws.com", user="admin",password="Admineia*",database="DBEIA")
 
       mycursor=mydb.cursor(buffered=True,dictionary=True)   
-      mycursor.execute("INSERT INTO DBEIA.eia_api_dots (value,units,devices_id) VALUES (%s,%s,%s)",(dot.value,dot.units,dot.devices_id))
+      mycursor.execute("INSERT INTO DBEIA.eia_api_dots (value,units,devices_id) VALUES (%s,%s,%s)",(dot.value,dot.units,dot.devices_id,dot.topic))
       mydb.commit()
       return{"dot":dot}
     
@@ -144,4 +150,22 @@ async def read_item(item_id):
       return {"data":content}
     except Exception as e:
       print("error",e)
-      return False
+      return {e}
+
+
+
+
+
+@app.post("/create_device/")
+async def create_device(devices:Device):
+    try:
+      mydb=mysql.connector.connect(host="dbadmin.c2xacwacu1dj.us-west-2.rds.amazonaws.com", user="admin",password="Admineia*",database="DBEIA")
+
+      mycursor=mydb.cursor(buffered=True,dictionary=True)   
+      mycursor.execute("INSERT INTO DBEIA.eia_api_devices (device_name,sectret,machines_id) VALUES (%s,%s,%s)",(devices.name,devices.secret,devices.machines_id))
+      mydb.commit()
+      return{"devices":devices}
+    
+    except Exception as e:
+      print("error",e)
+      return {e}
